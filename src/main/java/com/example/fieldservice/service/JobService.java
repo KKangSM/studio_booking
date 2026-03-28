@@ -16,6 +16,8 @@ public class JobService {
     }
 
     public List<Job> search(String keyword) {
+
+        String test;
         if (keyword == null || keyword.isBlank()) {
             return jobRepository.findAll();
         }
