@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>고객/현장 관리</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/jobs">현장관리</a>
+        <div class="navbar-nav">
+            <a class="nav-link active" href="/jobs">고객/현장</a>
+            <a class="nav-link" href="/estimates">견적</a>
+            <a class="nav-link" href="/estimates/new">견적 등록</a>
+            <form th:action="@{/logout}" method="post"><button class="btn btn-sm btn-outline-light mt-1 ms-2">로그아웃</button></form>
+        </div>
+    </div>
+</nav>
+<main class="container py-4">
+    <div class="row g-4">
+        <div class="col-12 col-lg-5">
+            <div class="card p-3 shadow-sm">
+                <div class="section-kicker">빠른 등록</div>
+                <h2 class="h5">고객/현장 등록</h2>
+                <form th:action="@{/jobs}" th:object="${jobForm}" method="post">
+                    <div class="mb-2">
+                        <label class="form-label">고객명</label>
+                        <input class="form-control" th:field="*{customerName}" required>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">현장명</label>
+                        <input class="form-control" th:field="*{siteName}" required>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">연락처</label>
+                        <input class="form-control" th:field="*{contact}">
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">주소</label>
+                        <input class="form-control" th:field="*{address}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">메모</label>
+                        <textarea class="form-control" rows="3" th:field="*{memo}"></textarea>
+                    </div>
+                    <button class="btn btn-primary w-100">등록하기</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-12 col-lg-7">
+            <div class="card p-3 shadow-sm">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <div class="section-kicker">현장 찾기</div>
+                        <h2 class="h5 mb-0">현장 목록</h2>
+                    </div>
+                    <form class="d-flex gap-2" method="get" action="/jobs">
+                        <input class="form-control" type="text" name="keyword" th:value="${keyword}" placeholder="고객명 또는 현장명 검색">
+                        <button class="btn btn-outline-secondary">검색</button>
+                    </form>
+                </div>
+                <div class="table-responsive d-none d-md-block">
+                    <table class="table align-middle">
+                        <thead><tr><th>ID</th><th>고객</th><th>현장</th><th>연락처</th><th></th></tr></thead>
+                        <tbody>
+                        <tr th:each="job : ${jobs}">
+                            <td th:text="${job.id}"></td>
+                            <td th:text="${job.customerName}"></td>
+                            <td th:text="${job.siteName}"></td>
+                            <td th:text="${#strings.isEmpty(job.contact) ? '-' : job.contact}"></td>
+                            <td class="text-end">
+                                <a class="btn btn-sm btn-outline-secondary" th:href="@{'/jobs/' + ${job.id}}">상세</a>
+                                <a class="btn btn-sm btn-primary" th:href="@{'/estimates/new?jobId=' + ${job.id}}">견적 등록</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="d-grid gap-2 d-md-none">
+                    <div class="list-card" th:each="job : ${jobs}">
+                        <div class="d-flex justify-content-between gap-3">
+                            <div>
+                                <div class="fw-semibold" th:text="${job.siteName}">현장명</div>
+                                <div class="text-muted small" th:text="${job.customerName}">고객명</div>
+                            </div>
+                            <span class="text-muted small" th:text="${job.id}">1</span>
+                        </div>
+                        <div class="small text-muted mt-2" th:text="${#strings.isEmpty(job.contact) ? '연락처 없음' : job.contact}">연락처</div>
+                        <div class="d-flex gap-2 mt-3">
+                            <a class="btn btn-sm btn-outline-secondary flex-fill" th:href="@{'/jobs/' + ${job.id}}">상세</a>
+                            <a class="btn btn-sm btn-primary flex-fill" th:href="@{'/estimates/new?jobId=' + ${job.id}}">견적 등록</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

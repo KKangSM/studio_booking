@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>견적 상세</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/jobs">현장관리</a>
+        <div class="navbar-nav">
+            <a class="nav-link" href="/jobs">고객/현장</a>
+            <a class="nav-link active" href="/estimates">견적</a>
+        </div>
+    </div>
+</nav>
+<main class="container py-4">
+    <div class="card p-3 shadow-sm mb-3">
+        <h1 class="h5">견적 상세 #<span th:text="${estimate.id}"></span></h1>
+        <p class="mb-1"><strong>고객:</strong> <span th:text="${estimate.job.customerName}"></span></p>
+        <p class="mb-1"><strong>현장:</strong> <span th:text="${estimate.job.siteName}"></span></p>
+        <p class="mb-1"><strong>제목:</strong> <span th:text="${#strings.isEmpty(estimate.title) ? '제목 없음' : estimate.title}"></span></p>
+        <p class="mb-3"><strong>메모:</strong> <span th:text="${#strings.isEmpty(estimate.note) ? '-' : estimate.note}"></span></p>
+
+        <form class="d-flex gap-2 flex-wrap" method="post" th:action="@{'/estimates/' + ${estimate.id} + '/status'}">
+            <select class="form-select w-auto" name="status">
+                <option th:each="s : ${statuses}" th:value="${s}" th:text="${s.label}" th:selected="${estimate.progressStatus == s}"></option>
+            </select>
+            <button class="btn btn-outline-primary">상태 변경</button>
+        </form>
+    </div>
+
+    <div class="card p-3 shadow-sm mb-3">
+        <h2 class="h6">견적 품목</h2>
+        <table class="table">
+            <thead><tr><th>품목</th><th class="text-end">금액</th></tr></thead>
+            <tbody>
+            <tr th:each="item : ${estimate.items}">
+                <td th:text="${item.itemName}"></td>
+                <td class="text-end" th:text="${#numbers.formatInteger(item.amount, 3, 'COMMA')} + ' 원'"></td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr><th>합계</th><th class="text-end" th:text="${#numbers.formatInteger(estimate.totalAmount, 3, 'COMMA')} + ' 원'"></th></tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div class="card p-3 shadow-sm">
+        <h2 class="h6">업로드 사진</h2>
+        <div class="row g-2">
+            <div class="col-6 col-md-3" th:each="photo : ${estimate.photos}">
+                <a th:href="@{'/photos/' + ${photo.storedName}}" target="_blank">
+                    <img class="img-fluid rounded border" th:src="@{'/photos/' + ${photo.storedName}}" th:alt="${photo.originalName}">
+                </a>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

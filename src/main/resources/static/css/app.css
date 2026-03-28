@@ -1,0 +1,60 @@
+body {
+    background: linear-gradient(180deg, #f7f8fa 0%, #eef2f7 100%);
+}
+
+.card {
+    border: 1px solid #dce3ec;
+    border-radius: 14px;
+}
+
+.navbar-brand {
+    font-weight: 700;
+}
+
+.section-kicker {
+    color: #5f6f82;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.detail-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.detail-list dt {
+    color: #5f6f82;
+    font-size: 0.82rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.detail-list dd {
+    margin: 0;
+    white-space: pre-wrap;
+}
+
+.estimate-card,
+.list-card {
+    background: #ffffff;
+    border: 1px solid #dce3ec;
+    border-radius: 12px;
+    color: inherit;
+    display: block;
+    padding: 1rem;
+    text-decoration: none;
+}
+
+.estimate-card:hover {
+    border-color: #86b7fe;
+}
+
+.empty-panel {
+    background: #f8fafc;
+    border: 1px dashed #c7d2df;
+    border-radius: 12px;
+    color: #5f6f82;
+    padding: 1rem;
+}
